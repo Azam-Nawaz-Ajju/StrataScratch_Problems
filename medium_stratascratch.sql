@@ -52,10 +52,8 @@ SELECT
     COUNT(*) as us_activ_share
 FROM fb_active_users
 
--- Problem ID : 2010 -- Top Streamers 
+-- Problem ID : 2010 -- Top 3 Streamers 
 -- PostgresSQL 
-
-
 
 WITH filter_data as (
 SELECT 
@@ -79,4 +77,32 @@ HAVING SUM(streaming_sessions) > SUM(viewing_sessions)
 ORDER BY streamer DESC
 LIMIT 3;
 
+
+-- Problem ID : 2014 -- Hour With The Highest Order Volume 
+
+WITH order_counts as 
+(
+    SELECT 
+        DATE_TRUNC('day', order_timestamp_utc) as order_date,
+        EXTRACT('HOUR' FROM order_timestamp_utc) as hour,
+        COUNT(id) as order_count
+    FROM postmates_orders 
+    GROUP BY 1,2
+), 
+summary as 
+(
+    SELECT 
+        hour, 
+        AVG(order_count) as avg_orders
+    FROM order_counts
+    GROUP BY HOUR
+)
+SELECT 
+    * 
+FROM summary
+WHERE avg_orders = (SELECT MAX(avg_orders) FROM summary)
+ORDER BY avg_orders DESC
+
+
+-- Problem ID : 2015 -- City With The Highest and Lowest Income Variance 
 
