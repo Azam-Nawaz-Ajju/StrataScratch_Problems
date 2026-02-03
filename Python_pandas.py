@@ -141,3 +141,41 @@ result = uber_orders.groupby(
 
 review_ids = uber_annual_review['emp_id'].unique()
 df = uber_employees[~uber_employees['id'].isin(review_ids)][['first_name','last_name','hire_date','termination_date']].sort_values('hire_date',ascending = False)
+
+
+# Days Without Hiring/Termination
+
+
+# Medium
+# ID 2045
+
+
+# Write a query to calculate the longest period (in days) that the company has gone without hiring anyone. Also, calculate the longest period without firing anyone. Limit yourself to dates inside the table (last hiring/termination date should be the latest hiring /termination date from table), don't go into future.
+
+# DataFrame
+# uber_employees
+
+# Import your libraries
+import pandas as pd
+
+df = uber_employees.copy() 
+
+df['hire_date'] = pd.to_datetime(df['hire_date'])
+df['termination_date'] = pd.to_datetime(df['termination_date'])
+result = pd.DataFrame({
+    'longest_without_hiring_days': [
+        df['hire_date']
+        .sort_values()
+        .diff()
+        .dt.days
+        .max()
+    ],
+    'longest_without_firing_days': [
+        df['termination_date']
+        .dropna()
+        .sort_values()
+        .diff()
+        .dt.days
+        .max()
+    ]
+})
