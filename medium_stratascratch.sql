@@ -106,3 +106,5 @@ ORDER BY avg_orders DESC
 
 -- Problem ID : 2015 -- City With The Highest and Lowest Income Variance 
 
+
+
