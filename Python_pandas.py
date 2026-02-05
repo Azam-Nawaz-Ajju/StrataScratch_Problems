@@ -11,7 +11,7 @@
 # money_spent:int64
 # customers_acquired:int64
 
-import pandas as pd 
+# import pandas as pd 
 uber_advertising = pd.read_csv("uber_advertising.csv")
 
 uber_advertising.head()
@@ -179,3 +179,34 @@ result = pd.DataFrame({
         .max()
     ]
 })
+
+# # Find the total monetary value for completed orders by service type for every month. Output your result as a pivot table where there is a column for month and columns for each service type.
+
+# DataFrame
+# uber_orders
+# order_date:datetime64[ns]
+# number_of_orders:int64
+# status_of_order:object
+# monetary_value:float64
+# service_name:object
+
+
+# Import your libraries
+import pandas as pd
+
+# Start writing code
+uber_orders.head()
+
+df = uber_orders.copy()
+df['month'] = pd.to_datetime(df['order_date']).dt.month
+
+pivot = pd.pivot_table(
+    data=df[df['status_of_order'] == 'Completed'],
+    index=['month'],
+    columns=['service_name'],
+    values='monetary_value',
+    aggfunc='sum'
+).reset_index()
+
+
+
